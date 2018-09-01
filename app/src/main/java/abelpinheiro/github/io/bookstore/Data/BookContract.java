@@ -33,6 +33,9 @@ public final class BookContract {
         //Quantidade disponivel do livro, de tipo INTEGER
         public static final String COLUMNS_BOOK_QUANTITY = "quantity";
 
+        //Gênero do livro, do tipo TEXT
+        public static final String COLUMNS_BOOK_GENRE = "genre";
+
         //Nome do fornecedor, de tipo TEXT
         public static final String COLUMNS_SUPPLIER_NAME = "supplierName";
 
