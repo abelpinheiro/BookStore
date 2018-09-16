@@ -2,4 +2,6 @@
     <string name="app_name">Book Store</string>
     <string name="empty_view_title">A lista de livros está vazia</string>
     <string name="empty_view_subtitle">Pressione o botão abaixo para adicionar um novo livro a lista.</string>
+    <string name="title_activity_editor">Activity Editor</string>
+    <string name="title_activity_save">Salvar novo livro</string>
 </resources>

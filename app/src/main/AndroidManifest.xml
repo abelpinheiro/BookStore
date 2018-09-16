@@ -18,9 +18,19 @@
         </activity>
 
         <provider
-            android:authorities="abelpinheiro.github.io.bookstore"
             android:name=".Data.BookProvider"
-            android:exported="false"/>
+            android:authorities="abelpinheiro.github.io.bookstore"
+            android:exported="false" />
+
+        <activity
+            android:name=".EditorActivity"
+            android:label="@string/title_activity_editor"
+            android:parentActivityName="abelpinheiro.github.io.bookstore.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="abelpinheiro.github.io.bookstore.MainActivity"/>
+        </activity>
+
     </application>
 
 </manifest>

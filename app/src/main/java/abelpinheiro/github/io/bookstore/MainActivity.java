@@ -1,6 +1,7 @@
 package abelpinheiro.github.io.bookstore;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
@@ -31,7 +32,10 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO FAZER BOTÃO CARREGAR A TELA DE EDITOR DE LIVRO PARA ADICIONAR NOVO LIVRO
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                String activityTitle = getString(R.string.title_activity_save);
+                intent.putExtra("SAVE_ACTIVITY_TITLE", activityTitle);
+                startActivity(intent);
             }
         });
 
