@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 
 import abelpinheiro.github.io.bookstore.Data.BookContract.BookEntry;
 import abelpinheiro.github.io.bookstore.Data.BookDbHelper;
@@ -33,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
                 //TODO FAZER BOTÃO CARREGAR A TELA DE EDITOR DE LIVRO PARA ADICIONAR NOVO LIVRO
             }
         });
+
+        ListView bookListView = findViewById(R.id.list);
+
+        View emptyView = findViewById(R.id.empty_view);
+        bookListView.setEmptyView(emptyView);
     }
 
     /**
