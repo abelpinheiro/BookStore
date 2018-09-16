@@ -3,12 +3,14 @@ package abelpinheiro.github.io.bookstore;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import abelpinheiro.github.io.bookstore.Data.BookContract.BookEntry;
 import abelpinheiro.github.io.bookstore.Data.BookDbHelper;
@@ -23,6 +25,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mBookDbHelper = new BookDbHelper(this);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO FAZER BOTÃO CARREGAR A TELA DE EDITOR DE LIVRO PARA ADICIONAR NOVO LIVRO
+            }
+        });
     }
 
     /**
