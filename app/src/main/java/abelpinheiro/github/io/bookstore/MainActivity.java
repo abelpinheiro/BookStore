@@ -54,10 +54,7 @@ public class MainActivity extends AppCompatActivity {
      * Como o unico modo de inserção é de um dado default, não há necessidade de tratar no momento
      * possíveis erros de inserção, como tirar os espaços vazios e etc
      */
-    public void insertDummyData(){
-        //Recebe o banco em modo de escrita
-        SQLiteDatabase database = mBookDbHelper.getWritableDatabase();
-
+    public void insertBook(){
         //Instancia um contentValue para armazenar as chaves-valores do elemento
         ContentValues contentValues = new ContentValues();
 
@@ -86,9 +83,6 @@ public class MainActivity extends AppCompatActivity {
      * Realiza uma busca no banco de dados e retorna todos os dados inseridos no banco
      */
     public void queryData(){
-        //Recebe o banco de dados em modo de leitura
-        SQLiteDatabase database = mBookDbHelper.getReadableDatabase();
-
         //Array de strings que contém as colunas que serão buscadas no banco
         String[] projection = {
                 BookEntry._id,
@@ -180,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_insert_dummy_data:
-                insertDummyData();
+                insertBook();
                 queryData();
                 return true;
         }

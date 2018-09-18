@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,48 +7,212 @@
     android:orientation="vertical"
     tools:context=".EditorActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:padding="16dp"
-        android:textColor="@color/primaryText"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-        android:text="Informações do livro"/>
-
-    <View
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/dividerColor" />
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Título: "/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Gênero: "/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Preço: "/>
+                <!-- TITULO DA TELA -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="16dp"
+                    android:text="Informações do livro"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    android:textColor="@color/primaryText" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Quantidade: "/>
+                <!-- DIVISOR -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/dividerColor" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fornecedor: "/>
+                <!-- TÍTULO DO LIVRO -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Telefone do fornecedor: "/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="Título: "
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-</LinearLayout>
+                    <EditText
+                        android:id="@+id/title_book"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginStart="32dp"
+                        android:hint="Título do livro"
+                        android:inputType="text"
+                        android:padding="8dp"
+                        android:textAlignment="center"
+                        android:textStyle="italic" />
+
+                </LinearLayout>
+
+                <!-- GENERO DO LIVRO -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        android:text="Gênero: " />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Gênero do livro"
+                        android:textAlignment="center"
+                        android:inputType="text"
+                        android:textStyle="italic"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginEnd="32dp"/>
+
+                </LinearLayout>
+
+                <!-- PREÇO DO LIVRO -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        android:text="Preço: " />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:hint="Preço do livro"
+                        android:textAlignment="center"
+                        android:textStyle="italic"
+                        android:inputType="numberDecimal"/>
+
+                </LinearLayout>
+
+                <!-- QUANTIDADE DE LIVRO -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        android:text="Quantidade: " />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Quantidade a comprar"
+                        android:inputType="number"
+                        android:textAlignment="center"
+                        android:textStyle="italic"
+                        android:layout_marginEnd="32dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        android:text="Fornecedor: " />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nome do fornecedor"
+                        android:textAlignment="center"
+                        android:inputType="text"
+                        android:textStyle="italic"
+                        android:layout_marginEnd="32dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        android:text="Telefone: " />
+
+                    <EditText
+                        android:id="@+id/supplier_phone_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Telefone do fornecedor"
+                        android:maxLength="9"
+                        android:inputType="phone"
+                        android:layout_marginStart="8dp"
+                        android:textAlignment="center"
+                        android:textStyle="italic"
+                        android:layout_marginEnd="32dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- BOTÃO DE ADICIONAR LIVRO-->
+            <LinearLayout
+                android:id="@+id/save_button_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/colorPrimary"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/textOrIcons"
+                    android:text="Adicionar Livro"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
