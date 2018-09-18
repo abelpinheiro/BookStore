@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -67,9 +68,7 @@ public class MainActivity extends AppCompatActivity {
         contentValues.put(BookEntry.COLUMNS_SUPPLIER_NAME, "Cultura");
         contentValues.put(BookEntry.COLUMNS_SUPPLIER_PHONE, "988276752");
 
-        //Inserção dos atributos do elemento em uma linha da tabela do banco de dados, retornando
-        //o ID da nova linha
-        Long rowId = database.insert(BookEntry.TABLE_NAME, null, contentValues);
+        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, contentValues);
     }
 
     /**
@@ -101,12 +100,9 @@ public class MainActivity extends AppCompatActivity {
                 BookEntry.COLUMNS_SUPPLIER_PHONE
         };
 
-        //Realiza uma busca no banco de dados pela tabela BookEntry.TABLE_NAME
-        Cursor cursor = database.query(
-                BookEntry.TABLE_NAME,
+        Cursor cursor = getContentResolver().query(
+                BookEntry.CONTENT_URI,
                 projection,
-                null,
-                null,
                 null,
                 null,
                 null

@@ -1,5 +1,6 @@
 package abelpinheiro.github.io.bookstore.Data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -11,6 +12,12 @@ public final class BookContract {
 
     //Impedir a possibilidade de instanciação da classe contrato por acidente
     private BookContract(){}
+
+    public static final String CONTENT_AUTHORITY = "abelpinheiro.github.io.bookstore";
+
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
+    public static final String PATH_BOOKS = "books";
 
     /**
      *
@@ -42,5 +49,6 @@ public final class BookContract {
         //Telefone do Fornecedor, do tipo TEXT
         public static final String COLUMNS_SUPPLIER_PHONE = "supplierPhone";
 
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BOOKS);
     }
 }
