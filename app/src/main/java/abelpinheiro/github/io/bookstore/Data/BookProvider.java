@@ -90,6 +90,21 @@ public class BookProvider extends ContentProvider {
 
     private Uri insertPet(Uri uri, ContentValues values) {
         //TODO FAZER VALIDAÇÃO DOS DADOS AO INSERIR
+        String title = values.getAsString(BookEntry.COLUMNS_BOOK_NAME);
+        if (title.isEmpty()){
+            throw new IllegalArgumentException("Título do livro não pode ser nulo.");
+        }
+
+        String genre = values.getAsString(BookEntry.COLUMNS_BOOK_GENRE);
+        if (genre.isEmpty()){
+            throw new IllegalArgumentException("Gênero do livro não pode ser nulo.");
+        }
+
+        String supplierName = values.getAsString(BookEntry.COLUMNS_SUPPLIER_NAME);
+        if (supplierName.isEmpty()){
+            throw new IllegalArgumentException("Nome do fornecedor não pode ser nulo.");
+        }
+
         /*String title = values.getAsString(BookEntry.COLUMNS_BOOK_NAME);
         if (title == null) {
             throw new IllegalArgumentException("O livro precisa de um título");
