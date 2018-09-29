@@ -13,12 +13,14 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/title"
             tools:text="TITULO"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="4dp" />
 
         <TextView
+            android:id="@+id/price"
             tools:text="PREÇO"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

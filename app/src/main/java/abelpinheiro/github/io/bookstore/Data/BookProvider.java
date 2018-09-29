@@ -44,7 +44,7 @@ public class BookProvider extends ContentProvider {
 
         Cursor cursor;
 
-        switch (sUriMatcher.match(uri)){
+        switch (sUriMatcher.match(uri)) {
             case BOOK:
                 cursor = database.query(BookEntry.TABLE_NAME,
                         projection,
@@ -56,7 +56,7 @@ public class BookProvider extends ContentProvider {
                 break;
             case BOOK_ID:
                 selection = BookEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = database.query(BookEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -75,7 +75,15 @@ public class BookProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BOOK:
+                return BookEntry.CONTENT_LIST_TYPE;
+            case BOOK_ID:
+                return BookEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("URI desconhecido: " + uri + " de vaçlor: " + match);
+        }
     }
 
     @Override
@@ -91,17 +99,17 @@ public class BookProvider extends ContentProvider {
     private Uri insertPet(Uri uri, ContentValues values) {
         //TODO FAZER VALIDAÇÃO DOS DADOS AO INSERIR
         String title = values.getAsString(BookEntry.COLUMNS_BOOK_NAME);
-        if (title.isEmpty()){
+        if (title.isEmpty()) {
             throw new IllegalArgumentException("Título do livro não pode ser nulo.");
         }
 
         String genre = values.getAsString(BookEntry.COLUMNS_BOOK_GENRE);
-        if (genre.isEmpty()){
+        if (genre.isEmpty()) {
             throw new IllegalArgumentException("Gênero do livro não pode ser nulo.");
         }
 
         String supplierName = values.getAsString(BookEntry.COLUMNS_SUPPLIER_NAME);
-        if (supplierName.isEmpty()){
+        if (supplierName.isEmpty()) {
             throw new IllegalArgumentException("Nome do fornecedor não pode ser nulo.");
         }
 
@@ -139,16 +147,95 @@ public class BookProvider extends ContentProvider {
 
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        // Obtenção do banco no modo escrita
         SQLiteDatabase database = mBookDbHelper.getWritableDatabase();
 
-        return 0;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BOOK:
+                // É deletado todos os registros que coincidem com os selection e selectionArgs
+                return database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+            case BOOK_ID:
+                // Deleta um único registro dado pelo ID na URI
+                selection = BookEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Não foi possível deletar para " + uri);
+        }
     }
 
+    // Update
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        SQLiteDatabase database = mBookDbHelper.getWritableDatabase();
+    public int update(Uri uri, ContentValues contentValues, String selection,
+                      String[] selectionArgs) {
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BOOK:
+                return updatePet(uri, contentValues, selection, selectionArgs);
+            case BOOK_ID:
+                selection = BookEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return updatePet(uri, contentValues, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Não é possível fazer update em " + uri);
+        }
+    }
 
-        return 0;
+    /**
+     * Atualiza os livros com os ContentValue fornecidos. As mudanças serão feitas nos registros
+     * de acordo com o selection e os selectionArgs dados.
+     * Retorna o número de registros atualizados.
+     */
+    private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        if (values.containsKey(BookEntry.COLUMNS_BOOK_NAME)){
+            String title = values.getAsString(BookEntry.COLUMNS_BOOK_NAME);
+            if (title == null){
+                throw new IllegalArgumentException("Titulo do livro não pode ser nulo.");
+            }
+        }
+
+        if (values.containsKey(BookEntry.COLUMNS_BOOK_PRICE)){
+            Integer price = values.getAsInteger(BookEntry.COLUMNS_BOOK_PRICE);
+            if (price == null){
+                throw new IllegalArgumentException("Preço de um livro não pode ser nulo.");
+            }
+        }
+
+        if (values.containsKey(BookEntry.COLUMNS_BOOK_QUANTITY)){
+            Integer quantity = values.getAsInteger(BookEntry.COLUMNS_BOOK_QUANTITY);
+            if (quantity == null){
+                throw new IllegalArgumentException("Quantidade de livros não podem ser nulo.");
+            }
+        }
+
+        if (values.containsKey(BookEntry.COLUMNS_BOOK_GENRE)){
+            String genre = values.getAsString(BookEntry.COLUMNS_BOOK_GENRE);
+            if (genre == null){
+                throw new IllegalArgumentException("O gênero do livro não pode ser nulo.");
+            }
+        }
+
+        if (values.containsKey(BookEntry.COLUMNS_SUPPLIER_NAME)){
+            String supplierName = values.getAsString(BookEntry.COLUMNS_SUPPLIER_NAME);
+            if (supplierName == null){
+                throw new IllegalArgumentException("Nome do fornecedor não pode ser nulo.");
+            }
+        }
+
+        if (values.containsKey(BookEntry.COLUMNS_SUPPLIER_PHONE)){
+            String supplierPhone = values.getAsString(BookEntry.COLUMNS_SUPPLIER_PHONE);
+            if (supplierPhone == null){
+                throw new IllegalArgumentException("Telefone do fornecedor não pode ser nulo.");
+            }
+        }
+
+        if (values.size() == 0){
+            return 0;
+        }
+
+        SQLiteDatabase database = mBookDbHelper.getWritableDatabase();
+        return database.update(BookEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 }

@@ -3,9 +3,13 @@ package abelpinheiro.github.io.bookstore;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,7 +22,11 @@ import android.widget.ListView;
 import abelpinheiro.github.io.bookstore.Data.BookContract.BookEntry;
 import abelpinheiro.github.io.bookstore.Data.BookDbHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int BOOK_LOADER = 0;
+
+    BookCursorAdapter mCursorAdapter;
 
     //Atributo para auxiliar a interação com o banco pelos métodos
     private BookDbHelper mBookDbHelper;
@@ -44,6 +52,11 @@ public class MainActivity extends AppCompatActivity {
 
         View emptyView = findViewById(R.id.empty_view);
         bookListView.setEmptyView(emptyView);
+
+        mCursorAdapter = new BookCursorAdapter(this, null);
+        bookListView.setAdapter(mCursorAdapter);
+
+        getSupportLoaderManager().initLoader(BOOK_LOADER, null, this);
     }
 
     /**
@@ -70,93 +83,6 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      *
-     * Override no ciclo de vida onStart da activity para fazer uma query dos dados atualmente inseridos no banco
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        queryData();
-    }
-
-    /**
-     *
-     * Realiza uma busca no banco de dados e retorna todos os dados inseridos no banco
-     */
-    public void queryData(){
-        //Array de strings que contém as colunas que serão buscadas no banco
-        String[] projection = {
-                BookEntry._id,
-                BookEntry.COLUMNS_BOOK_NAME,
-                BookEntry.COLUMNS_BOOK_PRICE,
-                BookEntry.COLUMNS_BOOK_QUANTITY,
-                BookEntry.COLUMNS_BOOK_GENRE,
-                BookEntry.COLUMNS_SUPPLIER_NAME,
-                BookEntry.COLUMNS_SUPPLIER_PHONE
-        };
-
-        Cursor cursor = getContentResolver().query(
-                BookEntry.CONTENT_URI,
-                projection,
-                null,
-                null,
-                null
-        );
-
-        //Mensagem do sistema indicando a quantidade de livros existentes no banco
-        Log.i("MainActivity.java", "A TABELA TEM " + cursor.getCount() + " livros");
-
-        //Mensagem do sistema indicando as colunas do banco de dados de livros
-        Log.i("MainActivity.java",
-                BookEntry._id + " - " +
-                BookEntry.COLUMNS_BOOK_NAME + " - " +
-                BookEntry.COLUMNS_BOOK_PRICE + " - " +
-                BookEntry.COLUMNS_BOOK_QUANTITY + " - " +
-                BookEntry.COLUMNS_BOOK_GENRE + " - " +
-                BookEntry.COLUMNS_SUPPLIER_NAME + " - " +
-                BookEntry.COLUMNS_SUPPLIER_PHONE);
-
-        try {
-
-            //Pegando o indice de cada coluna do banco
-            int idColumnIndex = cursor.getColumnIndex(BookEntry._id);
-            int nameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_QUANTITY);
-            int genreColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_GENRE);
-            int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_SUPPLIER_NAME);
-            int supplierPhoneColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_SUPPLIER_PHONE);
-
-            //Iteração por todas as linhas do Cursor
-            while (cursor.moveToNext()) {
-
-                //Pega os elementos da linha atual em seus respectivos tipos do cursor
-                long id = cursor.getLong(idColumnIndex);
-                String name = cursor.getString(nameColumnIndex);
-                int price = cursor.getInt(priceColumnIndex);
-                int quantity = cursor.getInt(quantityColumnIndex);
-                String genre = cursor.getString(genreColumnIndex);
-                String supplierName = cursor.getString(supplierNameColumnIndex);
-                String supplierPhone = cursor.getString(supplierPhoneColumnIndex);
-
-                //Mensagem do sistema descrevendo os elementos de cada livro inserido no banco
-                Log.i("MainActivity.java",
-                        Long.toString(id) + " - " +
-                                name + " - " +
-                                price + " - " +
-                                quantity + " - " +
-                                genre + " - " +
-                                supplierName + " - " +
-                                supplierPhone
-                );
-            }
-        }finally {
-            //Encerramento do cursor
-            cursor.close();
-        }
-    }
-
-    /**
-     *
      * Inflando o layout do menu na activity
      */
     @Override
@@ -175,9 +101,31 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.action_insert_dummy_data:
                 insertBook();
-                queryData();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
+        String[] projection = {
+                BookEntry._id,
+                BookEntry.COLUMNS_BOOK_NAME,
+                BookEntry.COLUMNS_BOOK_PRICE,
+                BookEntry.COLUMNS_BOOK_QUANTITY
+        };
+
+        return new CursorLoader(this, BookEntry.CONTENT_URI, projection, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        mCursorAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        mCursorAdapter.swapCursor(null);
     }
 }
