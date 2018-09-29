@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import abelpinheiro.github.io.bookstore.Data.BookContract.BookEntry;
@@ -51,17 +52,22 @@ public class BookCursorAdapter extends CursorAdapter {
         // Find individual views that we want to modify in the list item layout
         TextView titleTextView = (TextView) view.findViewById(R.id.title);
         TextView priceTextView = (TextView) view.findViewById(R.id.price);
+        TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
+        ImageView sellImageView = (ImageView) view.findViewById(R.id.buy_button);
 
         // Find the columns of pet attributes that we're interested in
         int titleColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_NAME);
         int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_PRICE);
+        int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_QUANTITY);
 
         // Read the pet attributes from the Cursor for the current pet
         String titleBook = cursor.getString(titleColumnIndex);
         String priceBook = cursor.getString(priceColumnIndex);
+        String quantityBook = cursor.getString(quantityColumnIndex);
 
         // Update the TextViews with the attributes for the current pet
         titleTextView.setText(titleBook);
         priceTextView.setText(priceBook);
+        quantityTextView.setText(quantityBook);
     }
 }

@@ -69,6 +69,8 @@ public class BookProvider extends ContentProvider {
                 throw new IllegalArgumentException("Não é possível buscar " + uri);
         }
 
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
         return cursor;
     }
 
@@ -141,6 +143,8 @@ public class BookProvider extends ContentProvider {
             return null;
         }
 
+        getContext().getContentResolver().notifyChange(uri, null);
+
         // Return the new URI with the ID (of the newly inserted row) appended at the end
         return ContentUris.withAppendedId(uri, id);
     }
@@ -155,12 +159,24 @@ public class BookProvider extends ContentProvider {
         switch (match) {
             case BOOK:
                 // É deletado todos os registros que coincidem com os selection e selectionArgs
-                return database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+                int deleted = database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+
+                if (deleted != 0){
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+
+                return deleted;
             case BOOK_ID:
                 // Deleta um único registro dado pelo ID na URI
                 selection = BookEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+                int rowDeleted = database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+
+                if (rowDeleted != 0){
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+
+                return rowDeleted;
             default:
                 throw new IllegalArgumentException("Não foi possível deletar para " + uri);
         }
@@ -236,6 +252,11 @@ public class BookProvider extends ContentProvider {
         }
 
         SQLiteDatabase database = mBookDbHelper.getWritableDatabase();
-        return database.update(BookEntry.TABLE_NAME, values, selection, selectionArgs);
+        int updated = database.update(BookEntry.TABLE_NAME, values, selection, selectionArgs);
+        if (updated != 0){
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return updated;
     }
 }
