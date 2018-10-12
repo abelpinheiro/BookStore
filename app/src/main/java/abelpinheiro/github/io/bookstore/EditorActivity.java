@@ -43,7 +43,7 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 insertBook();
-                //VOLTAR PRA MAIN ACTIVITY
+                finish();
             }
         });
     }

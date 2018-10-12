@@ -1,3 +1,4 @@
+
 package abelpinheiro.github.io.bookstore;
 
 import android.content.ContentValues;
@@ -17,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import abelpinheiro.github.io.bookstore.Data.BookContract.BookEntry;
@@ -57,6 +59,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         bookListView.setAdapter(mCursorAdapter);
 
         getSupportLoaderManager().initLoader(BOOK_LOADER, null, this);
+
+        bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /**
