@@ -1,7 +1,14 @@
 package abelpinheiro.github.io.bookstore;
 
 import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
@@ -13,9 +20,14 @@ import android.widget.Toast;
 
 import abelpinheiro.github.io.bookstore.Data.BookContract;
 
-public class EditorActivity extends AppCompatActivity {
+import static abelpinheiro.github.io.bookstore.Data.BookContract.*;
+
+public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String SAVE_ACTIVITY_TITLE = "SAVE_ACTIVITY_TITLE";
+
+    private static final int EXISTING_BOOK_LOADER = 0;
+    private Uri mCurrentBookUri;
 
     private EditText mBookTitleEditText;
     private EditText mBookGenreEditText;
@@ -28,8 +40,15 @@ public class EditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
-        String title = getIntent().getStringExtra(SAVE_ACTIVITY_TITLE);
-        setTitle(title);
+
+        Intent intent = getIntent();
+        Uri currentUri = intent.getData();
+        if (currentUri == null){
+            String title = getIntent().getStringExtra(SAVE_ACTIVITY_TITLE);
+            setTitle(title);
+        }else {
+            setTitle(getString(R.string.title_activity_edit));
+        }
 
         mBookTitleEditText = findViewById(R.id.title_book);
         mBookGenreEditText = findViewById(R.id.genre_book);
@@ -46,6 +65,8 @@ public class EditorActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
     }
 
     /**
@@ -87,14 +108,14 @@ public class EditorActivity extends AppCompatActivity {
         //Instancia um contentValue para armazenar as chaves-valores do elemento
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(BookContract.BookEntry.COLUMNS_BOOK_NAME, title);
-        contentValues.put(BookContract.BookEntry.COLUMNS_BOOK_PRICE, price);
-        contentValues.put(BookContract.BookEntry.COLUMNS_BOOK_QUANTITY, quantity);
-        contentValues.put(BookContract.BookEntry.COLUMNS_BOOK_GENRE, genre);
-        contentValues.put(BookContract.BookEntry.COLUMNS_SUPPLIER_NAME, supplierName);
-        contentValues.put(BookContract.BookEntry.COLUMNS_SUPPLIER_PHONE, supplierPhone);
+        contentValues.put(BookEntry.COLUMNS_BOOK_NAME, title);
+        contentValues.put(BookEntry.COLUMNS_BOOK_PRICE, price);
+        contentValues.put(BookEntry.COLUMNS_BOOK_QUANTITY, quantity);
+        contentValues.put(BookEntry.COLUMNS_BOOK_GENRE, genre);
+        contentValues.put(BookEntry.COLUMNS_SUPPLIER_NAME, supplierName);
+        contentValues.put(BookEntry.COLUMNS_SUPPLIER_PHONE, supplierPhone);
 
-        Uri newUri = getContentResolver().insert(BookContract.BookEntry.CONTENT_URI, contentValues);
+        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, contentValues);
         if (newUri == null){
             Toast.makeText(this, "ERRO AO ADICIONAR ", Toast.LENGTH_SHORT).show();
         }else {
@@ -102,4 +123,29 @@ public class EditorActivity extends AppCompatActivity {
         }
     }
 
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
+        String[] projection = {
+                BookEntry._id,
+                BookEntry.COLUMNS_BOOK_NAME,
+                BookEntry.COLUMNS_BOOK_GENRE,
+                BookEntry.COLUMNS_BOOK_PRICE,
+                BookEntry.COLUMNS_BOOK_QUANTITY,
+                BookEntry.COLUMNS_SUPPLIER_NAME,
+                BookEntry.COLUMNS_SUPPLIER_PHONE
+        };
+
+        return new CursorLoader(this, mCurrentBookUri, projection, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+
+    }
 }

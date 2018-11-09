@@ -4,4 +4,5 @@
     <string name="empty_view_subtitle">Pressione o botão abaixo para adicionar um novo livro a lista.</string>
     <string name="title_activity_editor">Activity Editor</string>
     <string name="title_activity_save">Salvar novo livro</string>
+    <string name="title_activity_edit">Editar livro</string>
 </resources>

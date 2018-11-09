@@ -1,6 +1,7 @@
 
 package abelpinheiro.github.io.bookstore;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -51,22 +52,26 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
 
         ListView bookListView = findViewById(R.id.list);
+        Log.e(getClass().getSimpleName(), "A PORRA DA LISTVIEW: " + bookListView);
 
         View emptyView = findViewById(R.id.empty_view);
         bookListView.setEmptyView(emptyView);
 
         mCursorAdapter = new BookCursorAdapter(this, null);
+        Log.e(getClass().getSimpleName(), "A PORRA DO ADAPTER: " + mCursorAdapter);
         bookListView.setAdapter(mCursorAdapter);
-
-        getSupportLoaderManager().initLoader(BOOK_LOADER, null, this);
 
         bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                Uri currentUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
+                intent.setData(currentUri);
                 startActivity(intent);
             }
         });
+
+        getSupportLoaderManager().initLoader(BOOK_LOADER, null, this);
     }
 
     /**
