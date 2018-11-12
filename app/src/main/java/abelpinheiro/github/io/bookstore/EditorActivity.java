@@ -42,12 +42,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         setContentView(R.layout.activity_editor);
 
         Intent intent = getIntent();
-        Uri currentUri = intent.getData();
-        if (currentUri == null){
+        mCurrentBookUri = intent.getData();
+        if (mCurrentBookUri == null){
             String title = getIntent().getStringExtra(SAVE_ACTIVITY_TITLE);
             setTitle(title);
         }else {
             setTitle(getString(R.string.title_activity_edit));
+
+            getSupportLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
 
         mBookTitleEditText = findViewById(R.id.title_book);
@@ -65,8 +67,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 finish();
             }
         });
-
-        getSupportLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
     }
 
     /**
@@ -142,6 +142,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
 
+        if (cursor == null || cursor.getCount() < 1) {
+            return;
+        }
+
         if (cursor.moveToFirst()){
             // Acha as colunas de atributos pet em que estamos interessados
             int titleColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_NAME);
@@ -156,8 +160,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             String genre = cursor.getString(genreColumnIndex);
 
             mBookTitleEditText.setText(title);
-            mBookPriceEditText.setText(price);
-            mBookQuantityEditText.setText(quantity);
+            //mBookPriceEditText.setText(price);
+            //mBookQuantityEditText.setText(quantity);
             mBookGenreEditText.setText(genre);
         }
     }
