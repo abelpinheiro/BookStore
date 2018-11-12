@@ -98,13 +98,5 @@ public class BookCursorAdapter extends CursorAdapter {
                 }
             }
         });
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "O livro não está mais disponível para venda.", Toast.LENGTH_SHORT).show();
-
-            }
-        });
     }
 }
