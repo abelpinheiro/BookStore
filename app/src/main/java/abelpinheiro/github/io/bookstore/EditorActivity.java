@@ -66,7 +66,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             }
         });
 
-        //getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
+        getSupportLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
     }
 
     /**
@@ -142,6 +142,24 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
 
+        if (cursor.moveToFirst()){
+            // Acha as colunas de atributos pet em que estamos interessados
+            int titleColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_NAME);
+            int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_PRICE);
+            int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_QUANTITY);
+            int genreColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_GENRE);
+
+            // Extrai o valor do Cursor para o índice de coluna dado
+            String title = cursor.getString(titleColumnIndex);
+            int price = cursor.getInt(priceColumnIndex);
+            int quantity = cursor.getInt(quantityColumnIndex);
+            String genre = cursor.getString(genreColumnIndex);
+
+            mBookTitleEditText.setText(title);
+            mBookPriceEditText.setText(price);
+            mBookQuantityEditText.setText(quantity);
+            mBookGenreEditText.setText(genre);
+        }
     }
 
     @Override
