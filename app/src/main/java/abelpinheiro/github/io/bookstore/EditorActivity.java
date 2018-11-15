@@ -1,18 +1,24 @@
 package abelpinheiro.github.io.bookstore;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -28,6 +34,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     private static final int EXISTING_BOOK_LOADER = 0;
     private Uri mCurrentBookUri;
+    private boolean mBookHasChanged = false;
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mBookHasChanged = true;
+            return false;
+        }
+    };
 
     private EditText mBookTitleEditText;
     private EditText mBookGenreEditText;
@@ -58,6 +72,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mBookQuantityEditText = findViewById(R.id.quantity_book);
         mSupplierNameEditText = findViewById(R.id.supplier_name);
         mSupplierPhoneEditText = findViewById(R.id.supplier_phone);
+
+        mBookTitleEditText.setOnTouchListener(mTouchListener);
+        mBookGenreEditText.setOnTouchListener(mTouchListener);
+        mBookPriceEditText.setOnTouchListener(mTouchListener);
+        mBookQuantityEditText.setOnTouchListener(mTouchListener);
+        mSupplierNameEditText.setOnTouchListener(mTouchListener);
+        mSupplierPhoneEditText.setOnTouchListener(mTouchListener);
 
         final LinearLayout addBookButton = (LinearLayout) findViewById(R.id.save_button_view);
         addBookButton.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +117,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String supplierName = mSupplierNameEditText.getText().toString().trim();
         String supplierPhone = PhoneNumberUtils.formatNumber(mSupplierPhoneEditText.getText().toString(), "BR");
 
+        if (mCurrentBookUri == null && TextUtils.isEmpty(title) && TextUtils.isEmpty(genre) && TextUtils.isEmpty(supplierName) && TextUtils.isEmpty(supplierPhone)){
+            return;
+        }
+
         //Instancia um contentValue para armazenar as chaves-valores do elemento
         ContentValues contentValues = new ContentValues();
 
@@ -122,6 +147,62 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             }
         }
     }
+
+    private void showUnsavedChangeDialog(DialogInterface.OnClickListener discardButtonListener){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.unsaved_dialog_change_message);
+        builder.setPositiveButton(R.string.discard_message, discardButtonListener);
+        builder.setNegativeButton(R.string.keep_editing_message, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (dialogInterface != null){
+                    dialogInterface.dismiss();
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem){
+        switch (menuItem.getItemId()){
+            case android.R.id.home:
+                if (!mBookHasChanged){
+                    NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                    return true;
+                }
+
+                DialogInterface.OnClickListener discardListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                    }
+                };
+                showUnsavedChangeDialog(discardListener);
+                return true;
+        }
+        return super.onOptionsItemSelected(menuItem);
+    }
+
+    @Override
+    public void onBackPressed(){
+        if (!mBookHasChanged){
+            super.onBackPressed();
+            return;
+        }
+
+        DialogInterface.OnClickListener discardListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        };
+
+        showUnsavedChangeDialog(discardListener);
+    }
+
 
     @NonNull
     @Override

@@ -5,4 +5,8 @@
     <string name="title_activity_editor">Activity Editor</string>
     <string name="title_activity_save">Salvar novo livro</string>
     <string name="title_activity_edit">Editar livro</string>
+    <string name="unsaved_dialog_change_message">Você deseja sair sem salvar o livro?</string>
+    <string name="keep_editing_message">continuar editando</string>
+    <string name="discard_message">sair da tela</string>
+
 </resources>
