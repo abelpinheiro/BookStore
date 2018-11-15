@@ -63,7 +63,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         addBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                insertBook();
+                saveBook();
                 finish();
             }
         });
@@ -77,7 +77,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
      * Como o unico modo de inserção é de um dado default, não há necessidade de tratar no momento
      * possíveis erros de inserção, como tirar os espaços vazios e etc
      */
-    public void insertBook(){
+    public void saveBook(){
         String title = mBookTitleEditText.getText().toString().trim();
         String genre = mBookGenreEditText.getText().toString().trim();
         String priceString = mBookPriceEditText.getText().toString().trim();
@@ -94,16 +94,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
 
         String supplierName = mSupplierNameEditText.getText().toString().trim();
-
         String supplierPhone = PhoneNumberUtils.formatNumber(mSupplierPhoneEditText.getText().toString(), "BR");
-
-
-        Log.i("EditorActivity.java", "VALOR DE TITULO É " + title + "E O SEU TIPO DE DADO É " + title.getClass().getName());
-        Log.i("EditorActivity.java", "VALOR DE GENERO É " + genre);
-        Log.i("EditorActivity.java", "VALOR DE PREÇO É " + price);
-        Log.i("EditorActivity.java", "VALOR DE QUANTIDADE É " + quantity);
-        Log.i("EditorActivity.java", "VALOR DE NOME FORNECEDOR É " + supplierName);
-        Log.i("EditorActivity.java", "VALOR DE TELEFONE FORNECEDOR É " + supplierPhone);
 
         //Instancia um contentValue para armazenar as chaves-valores do elemento
         ContentValues contentValues = new ContentValues();
@@ -115,11 +106,20 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         contentValues.put(BookEntry.COLUMNS_SUPPLIER_NAME, supplierName);
         contentValues.put(BookEntry.COLUMNS_SUPPLIER_PHONE, supplierPhone);
 
-        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, contentValues);
-        if (newUri == null){
-            Toast.makeText(this, "ERRO AO ADICIONAR ", Toast.LENGTH_SHORT).show();
+        if (mCurrentBookUri == null){
+            Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, contentValues);
+            if (newUri == null){
+                Toast.makeText(this, "ERRO AO ADICIONAR ", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this, "Livro adicionado com sucesso!", Toast.LENGTH_SHORT).show();
+            }
         }else {
-            Toast.makeText(this, "Livro adicionado com sucesso!", Toast.LENGTH_SHORT).show();
+            int rowsAffected = getContentResolver().update(mCurrentBookUri, contentValues, null, null);
+            if (rowsAffected == 0){
+                Toast.makeText(this, "ERRO AO ATUALIZAR ", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this, "Livro atualizado com sucesso!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -152,17 +152,23 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_PRICE);
             int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_QUANTITY);
             int genreColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_GENRE);
+            int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_SUPPLIER_NAME);
+            int supplierPhoneColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_SUPPLIER_PHONE);
 
             // Extrai o valor do Cursor para o índice de coluna dado
             String title = cursor.getString(titleColumnIndex);
             int price = cursor.getInt(priceColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             String genre = cursor.getString(genreColumnIndex);
+            String supplierName = cursor.getString(supplierNameColumnIndex);
+            String supplierPhone = cursor.getString(supplierPhoneColumnIndex);
 
             mBookTitleEditText.setText(title);
-            //mBookPriceEditText.setText(price);
-            //mBookQuantityEditText.setText(quantity);
+            mBookPriceEditText.setText(Integer.toString(price));
+            mBookQuantityEditText.setText(Integer.toString(quantity));
             mBookGenreEditText.setText(genre);
+            mSupplierNameEditText.setText(supplierName);
+            mSupplierPhoneEditText.setText(supplierPhone);
         }
     }
 
