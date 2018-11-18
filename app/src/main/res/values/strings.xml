@@ -8,5 +8,21 @@
     <string name="unsaved_dialog_change_message">Você deseja sair sem salvar o livro?</string>
     <string name="keep_editing_message">continuar editando</string>
     <string name="discard_message">sair da tela</string>
+    <string name="information_message_editor_layout">Informações do livro</string>
+    <string name="detail_message_editor_layout">Detalhes do livro</string>
 
+    <!-- Toast message in editor when current pet was successfully deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_book_successful">Livro excluido</string>
+
+    <!-- Toast message in editor when current pet has failed to be deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_book_failed">Erro ao tentar deletar o livro</string>
+
+    <!-- Dialog message to ask the user to confirm deleting the current pet [CHAR LIMIT=NONE] -->
+    <string name="delete_dialog_message">Você gostaria de deletar o livro?</string>
+
+    <!-- Dialog button text for the option to confirm deleting the current pet [CHAR LIMIT=20] -->
+    <string name="delete">Deletar</string>
+
+    <!-- Dialog button text for the option to cancel deletion of the current pet [CHAR LIMIT=20] -->
+    <string name="cancel">Cancelar</string>
 </resources>

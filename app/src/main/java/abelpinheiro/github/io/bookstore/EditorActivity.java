@@ -20,8 +20,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import abelpinheiro.github.io.bookstore.Data.BookContract;
@@ -53,16 +55,24 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editor);
+        setContentView(R.layout.activity_detail);
+
+        Button deleteButton = (Button) findViewById(R.id.delete_button);
+        TextView informationMessage = (TextView) findViewById(R.id.information_message);
 
         Intent intent = getIntent();
         mCurrentBookUri = intent.getData();
+
+        // Se for nulo, é por que a tela está no modo de inserção de livros. Se não,
+        // é a tela de de detalhes e edição do livro existente
         if (mCurrentBookUri == null){
             String title = getIntent().getStringExtra(SAVE_ACTIVITY_TITLE);
             setTitle(title);
+            deleteButton.setVisibility(View.GONE);
+            informationMessage.setText(getString(R.string.information_message_editor_layout));
         }else {
             setTitle(getString(R.string.title_activity_edit));
-
+            informationMessage.setText(getString(R.string.detail_message_editor_layout));
             getSupportLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
 
@@ -80,12 +90,20 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mSupplierNameEditText.setOnTouchListener(mTouchListener);
         mSupplierPhoneEditText.setOnTouchListener(mTouchListener);
 
-        final LinearLayout addBookButton = (LinearLayout) findViewById(R.id.save_button_view);
+        final Button addBookButton = (Button) findViewById(R.id.save_button_view);
         addBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveBook();
                 finish();
+            }
+        });
+
+        Button deleteBookButton = (Button) findViewById(R.id.delete_button);
+        deleteBookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDeleteConfirmationDialog();
             }
         });
     }
@@ -203,6 +221,48 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         showUnsavedChangeDialog(discardListener);
     }
 
+    private void showDeleteConfirmationDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the postivie and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog_message);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Delete" button, so delete the pet.
+                deletePet();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Cancel" button, so dismiss the dialog
+                // and continue editing the pet.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /**
+     * Perform the deletion of the pet in the database.
+     */
+    private void deletePet() {
+        if (mCurrentBookUri != null){
+            int rowsDeleted = getContentResolver().delete(mCurrentBookUri, null, null);
+
+            if (rowsDeleted == 0){
+                Toast.makeText(this, getString(R.string.editor_delete_book_failed), Toast.LENGTH_SHORT ).show();
+            }else {
+                Toast.makeText(this, getString(R.string.editor_delete_book_successful), Toast.LENGTH_SHORT ).show();
+            }
+        }
+
+        finish();
+    }
 
     @NonNull
     @Override
