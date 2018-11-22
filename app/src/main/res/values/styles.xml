@@ -82,4 +82,43 @@
         <item name="android:layout_margin">16dp</item>
         <item name="android:src">@drawable/baseline_add_white_48</item>
     </style>
+
+    <!-- ESTILO DOS BOTÕES DE ACTIVITY_DETAIL -->
+    <style name="editor_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">16dp</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">#FFF</item>
+    </style>
+
+    <!-- ESTILO DO CONTAINER DE ACTIVITY_DETAIL -->
+    <style name="container_label_input">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <!-- ESTILO DO CONTAINER DE LIST_ITEM -->
+    <style name="container_list_item_data">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <!-- ESTILO DOS TEXT VIEWS EM LIST ITEM -->
+    <style name="list_item_text_field_layout">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- ESTILO DO BOTÃO DE VENDAS NO ITEM DA LIST VIEW -->
+    <style name="sell_button_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">false</item>
+    </style>
 </resources>

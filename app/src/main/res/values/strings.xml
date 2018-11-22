@@ -1,28 +1,106 @@
 <resources>
+    <!-- Label da MainActivity usada no manifest -->
     <string name="app_name">Book Store</string>
+
+    <!-- Titulo da mensagem de empty view -->
     <string name="empty_view_title">A lista de livros está vazia</string>
+
+    <!-- subtitulo da mensagem de empty view -->
     <string name="empty_view_subtitle">Pressione o botão abaixo para adicionar um novo livro a lista.</string>
+
+    <!-- Label da EditorActivity usada no manifest -->
     <string name="title_activity_editor">Activity Editor</string>
+
+    <!-- Título do modo de EditorActivity -->
     <string name="title_activity_save">Salvar novo livro</string>
+
+    <!-- Título do modo de EditorActivity -->
     <string name="title_activity_edit">Editar livro</string>
+
+    <!-- Mensagem de diálogo perguntando se o usuario deseja sair sair do editor sem salvar edição realizada -->
     <string name="unsaved_dialog_change_message">Você deseja sair sem salvar o livro?</string>
+
+    <!-- Texto do botão de diálogo para a opção de continuar editando (ou salvar) um livro-->
     <string name="keep_editing_message">continuar editando</string>
+
+    <!-- Texto do botão de diálogo para a opção de sair da tela sem salvar as edições feitas em um livro -->
     <string name="discard_message">sair da tela</string>
+
+    <!-- Título no editor que mostra o modo atual da activity: modo de inserção -->
     <string name="information_message_editor_layout">Informações do livro</string>
+
+    <!-- Título no editor que mostra o modo atual da activity: modo de edição ou exclusão -->
     <string name="detail_message_editor_layout">Detalhes do livro</string>
 
-    <!-- Toast message in editor when current pet was successfully deleted [CHAR LIMIT=NONE] -->
+    <!-- Toast no editor quando um livro é deletado -->
     <string name="editor_delete_book_successful">Livro excluido</string>
 
-    <!-- Toast message in editor when current pet has failed to be deleted [CHAR LIMIT=NONE] -->
+    <!-- Toast no editor quanto não é possível deletar um livro -->
     <string name="editor_delete_book_failed">Erro ao tentar deletar o livro</string>
 
-    <!-- Dialog message to ask the user to confirm deleting the current pet [CHAR LIMIT=NONE] -->
+    <!-- Mensagem de diálogo perguntando se o usuario deseja excluir o livro atual -->
     <string name="delete_dialog_message">Você gostaria de deletar o livro?</string>
 
-    <!-- Dialog button text for the option to confirm deleting the current pet [CHAR LIMIT=20] -->
+    <!-- Texto do botão de diálogo para a opção de deleção do livro confirmando a deleção -->
     <string name="delete">Deletar</string>
 
-    <!-- Dialog button text for the option to cancel deletion of the current pet [CHAR LIMIT=20] -->
+    <!-- Texto do botão de diálogo para a opção de deleção do livro desistindo da deleção -->
     <string name="cancel">Cancelar</string>
+
+    <!-- Label do campo titulo -->
+    <string name="title_label">Título: </string>
+
+    <!-- Hint do campo titulo -->
+    <string name="title_hint">Título do livro</string>
+
+    <!-- Label do campo gênero -->
+    <string name="gender_label">Gênero: </string>
+
+    <!-- Hint do campo gênero -->
+    <string name="gender_hint">Gênero do livro</string>
+
+    <!-- Label do campo preço -->
+    <string name="price_label">Preço: </string>
+
+    <!-- Hint do campo preço -->
+    <string name="price_hint">Preço do livro</string>
+
+    <!-- Label do campo quantidade -->
+    <string name="quantity_label">Quantidade: </string>
+
+    <!-- Botão de decréscimo de quantidade -->
+    <string name="minus_quantity_button">-</string>
+
+    <!-- Botão de acréscimo de quantidade -->
+    <string name="plus_quantity_button">+</string>
+
+    <!-- Label do campo fornecedor -->
+    <string name="supplier_label">Fornecedor: </string>
+
+    <!-- Hint do campo fornecedor -->
+    <string name="supplier_hint">Fornecedor do livro</string>
+
+    <!-- Label do campo de telefone do fornecedor -->
+    <string name="supplier_phone_label">Telefone: </string>
+
+    <!-- Hint do campo de telefone do fornecedor -->
+    <string name="supplier_phone_hint">Telefone do livro</string>
+
+    <!-- Botão de discagem -->
+    <string name="dial_supplier_button">DISCAR TELEFONE</string>
+
+    <!-- Botão de edição -->
+    <string name="edit_button">EDITAR</string>
+
+    <!-- Botão de deleção -->
+    <string name="delete_button">EXCLUIR</string>
+
+    <!-- Toast que indica que não é possível mais decrementar a quantidade de um livro existente na list view -->
+    <string name="decrease_quantity_error">O livro não está mais disponível para venda.</string>
+
+    <!-- Simbolo do dinheiro, para melhorar a indentificação da label de preço para o usuario -->
+    <string name="money_symbol">R$ </string>
+
+    <!-- Label de quantidade no item da list view -->
+    <string name="quantity_label_list_item">QTD: </string>
 </resources>

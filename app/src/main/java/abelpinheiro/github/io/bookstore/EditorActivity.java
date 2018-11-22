@@ -59,6 +59,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         Button deleteButton = (Button) findViewById(R.id.delete_button);
         TextView informationMessage = (TextView) findViewById(R.id.information_message);
+        Button dialPhone = (Button) findViewById(R.id.dial_phone_button);
 
         Intent intent = getIntent();
         mCurrentBookUri = intent.getData();
@@ -69,6 +70,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             String title = getIntent().getStringExtra(SAVE_ACTIVITY_TITLE);
             setTitle(title);
             deleteButton.setVisibility(View.GONE);
+            dialPhone.setVisibility(View.GONE);
             informationMessage.setText(getString(R.string.information_message_editor_layout));
         }else {
             setTitle(getString(R.string.title_activity_edit));
@@ -90,6 +92,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mSupplierNameEditText.setOnTouchListener(mTouchListener);
         mSupplierPhoneEditText.setOnTouchListener(mTouchListener);
 
+        dialPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialPhoneNumber();
+            }
+        });
+
         final Button addBookButton = (Button) findViewById(R.id.save_button_view);
         addBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +115,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 showDeleteConfirmationDialog();
             }
         });
+    }
+
+    private void dialPhoneNumber() {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        String phoneNumber = mSupplierPhoneEditText.getText().toString();
+        intent.setData(Uri.parse("tel:" + phoneNumber));
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+
     }
 
     /**

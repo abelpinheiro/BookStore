@@ -1,4 +1,3 @@
-
 package abelpinheiro.github.io.bookstore;
 
 import android.content.ContentUris;
@@ -14,7 +13,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,19 +25,19 @@ import abelpinheiro.github.io.bookstore.Data.BookDbHelper;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    // Identificador do loader
     private static final int BOOK_LOADER = 0;
 
+    // Pega a referência do adapter
     BookCursorAdapter mCursorAdapter;
-
-    //Atributo para auxiliar a interação com o banco pelos métodos
-    private BookDbHelper mBookDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mBookDbHelper = new BookDbHelper(this);
 
+        // Listener do botão flutuante de adição de elemento. Ao clicar, vai abrir a tela para
+        // inserir elemento no banco de dados
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,16 +49,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
+        // Pega a referência da ListView.
         ListView bookListView = findViewById(R.id.list);
-        Log.e(getClass().getSimpleName(), "A PORRA DA LISTVIEW: " + bookListView);
 
+        // Seta o container de empty_view para caso não houver itens no banco de dados
         View emptyView = findViewById(R.id.empty_view);
         bookListView.setEmptyView(emptyView);
 
+        // Instanciação do adapter
         mCursorAdapter = new BookCursorAdapter(this, null);
-        Log.e(getClass().getSimpleName(), "A PORRA DO ADAPTER: " + mCursorAdapter);
         bookListView.setAdapter(mCursorAdapter);
 
+        // Listener da ListView. Abre em EditorActivity o elemento clicado.
         bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
+        // Prepara o loader (reconectando com um existente ou criando um novo)
         getSupportLoaderManager().initLoader(BOOK_LOADER, null, this);
     }
 
@@ -79,8 +80,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * Método para inserir no banco de dados um elemento ficticio para testar a
      * funcionalidade do banco.
      *
-     * Como o unico modo de inserção é de um dado default, não há necessidade de tratar no momento
-     * possíveis erros de inserção, como tirar os espaços vazios e etc
+     * Como o unico modo de inserção é de um dado default, não há necessidade de tratar
+     * possíveis erros de inserção
      */
     public void insertBook(){
         //Instancia um contentValue para armazenar as chaves-valores do elemento
@@ -121,6 +122,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     *
+     * Método chamado quando um Loader é criado
+     * @param i
+     * @param bundle
+     * @return um cursorloader
+     */
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
@@ -134,11 +142,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return new CursorLoader(this, BookEntry.CONTENT_URI, projection, null, null, null);
     }
 
+    /**
+     *
+     * Realiza a mudança do cursor no loader
+     * @param loader
+     * @param cursor
+     */
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         mCursorAdapter.swapCursor(cursor);
     }
 
+    /**
+     *
+     * Chamado quando onLoadFinished é executado, reiniciando o loader com os novos dados
+     * @param loader
+     */
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mCursorAdapter.swapCursor(null);

@@ -50,10 +50,13 @@ public final class BookContract {
         //Telefone do Fornecedor, do tipo TEXT
         public static final String COLUMNS_SUPPLIER_PHONE = "supplierPhone";
 
+        // Content URI para acessar o livro no provider
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BOOKS);
 
+        // MIME para um único livro
         public static final String CONTENT_LIST_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
 
+        // MIME para retornar todos os livros
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
     }
 }

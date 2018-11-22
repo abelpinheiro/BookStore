@@ -13,26 +13,37 @@ import android.util.Log;
 
 import static abelpinheiro.github.io.bookstore.Data.BookContract.*;
 
+/**
+ * {@link BookProvider} para o aplicativo BookStore
+ */
 public class BookProvider extends ContentProvider {
 
+    // Tag para mensagens de log
     public static final String LOG_TAG = BookProvider.class.getSimpleName();
 
+    // Código URI matcher para o content URI da tabela de livros
     private static final int BOOK = 100;
 
+    // Código URI matcher para o content URI de um único livro da tabela de livros
     private static final int BOOK_ID = 101;
 
+    // Objeto URI para corresponder com um content URI de um dado ID
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
+    // Inicializador estático
     static {
         sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.PATH_BOOKS, BOOK);
 
         sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.PATH_BOOKS + "/#", BOOK_ID);
     }
 
+    // Objeto do banco de dados
     private BookDbHelper mBookDbHelper;
 
     @Override
     public boolean onCreate() {
+
+        // Instanciação do banco
         mBookDbHelper = new BookDbHelper(getContext());
         return true;
     }
@@ -40,12 +51,18 @@ public class BookProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+
+        // Pega o banco no modo de leitura
         SQLiteDatabase database = mBookDbHelper.getReadableDatabase();
 
+        // Cursor para retornar o resultado da consulta
         Cursor cursor;
 
+        // Switch para ver se a URI corresponde a um código específico ou não
         switch (sUriMatcher.match(uri)) {
             case BOOK:
+
+                // Faz uma consulta para retornar as linhas da tabela de Books
                 cursor = database.query(BookEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -55,6 +72,9 @@ public class BookProvider extends ContentProvider {
                         sortOrder);
                 break;
             case BOOK_ID:
+
+                // Pega o ID específico do content URI e faz uma consulta, retornando
+                // o Book que possui esse ID do banco
                 selection = BookEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = database.query(BookEntry.TABLE_NAME,
@@ -69,6 +89,7 @@ public class BookProvider extends ContentProvider {
                 throw new IllegalArgumentException("Não é possível buscar " + uri);
         }
 
+        // Saber para que o content URI foi criado e verificar se houve alterações nele
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         return cursor;
@@ -98,8 +119,15 @@ public class BookProvider extends ContentProvider {
         }
     }
 
+    /**
+     * Realiza uma inserção no banco de dados com os content values indicados.
+     * @param uri
+     * @param values
+     * @return um novo content URI para essa linha do banco
+     */
     private Uri insertPet(Uri uri, ContentValues values) {
         //TODO FAZER VALIDAÇÃO DOS DADOS AO INSERIR
+        // Chega recebe os dados da tabela e verifica se são nulos
         String title = values.getAsString(BookEntry.COLUMNS_BOOK_NAME);
         if (title.isEmpty()) {
             throw new IllegalArgumentException("Título do livro não pode ser nulo.");
@@ -119,33 +147,33 @@ public class BookProvider extends ContentProvider {
         if (title == null) {
             throw new IllegalArgumentException("O livro precisa de um título");
         }
-
         // Check that the gender is valid
         Integer gender = values.getAsInteger(PetEntry.COLUMN_PET_GENDER);
         if (gender == null || !PetEntry.isValidGender(gender)) {
             throw new IllegalArgumentException("Pet requires valid gender");
         }
-
         // If the weight is provided, check that it's greater than or equal to 0 kg
         Integer weight = values.getAsInteger(PetEntry.COLUMN_PET_WEIGHT);
         if (weight != null && weight < 0) {
             throw new IllegalArgumentException("Pet requires valid weight");
         }*/
 
-        // Get writeable database
+        // Pega o banco no modo de escrita
         SQLiteDatabase database = mBookDbHelper.getWritableDatabase();
 
-        // Insert the new pet with the given values
+        // Insere o novo livro no banco com os valores dados
         long id = database.insert(BookEntry.TABLE_NAME, null, values);
-        // If the ID is -1, then the insertion failed. Log an error and return null.
+
+        // Se a inserção for -1, significa que falhou e retorna uma mensagem de erro
         if (id == -1) {
             Log.e(LOG_TAG, "Não foi possível inserir no banco: " + uri);
             return null;
         }
 
+        // Notifica mudança dos dados para este URI
         getContext().getContentResolver().notifyChange(uri, null);
 
-        // Return the new URI with the ID (of the newly inserted row) appended at the end
+        // Retorna o novo URI com o ID no final
         return ContentUris.withAppendedId(uri, id);
     }
 
@@ -155,16 +183,19 @@ public class BookProvider extends ContentProvider {
         // Obtenção do banco no modo escrita
         SQLiteDatabase database = mBookDbHelper.getWritableDatabase();
 
+        // Switch para ver se a URI corresponde a um código específico ou não
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case BOOK:
                 // É deletado todos os registros que coincidem com os selection e selectionArgs
                 int deleted = database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
 
+                // Notifica que content URI possuem dados alterados caso tenha mais de uma linha deletada
                 if (deleted != 0){
                     getContext().getContentResolver().notifyChange(uri, null);
                 }
 
+                // Retorna quantidade de linhas deletadas
                 return deleted;
             case BOOK_ID:
                 // Deleta um único registro dado pelo ID na URI
@@ -172,10 +203,12 @@ public class BookProvider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 int rowDeleted = database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
 
+                // Notifica que content URI possuem dados alterados caso tenha mais de uma linha deletada
                 if (rowDeleted != 0){
                     getContext().getContentResolver().notifyChange(uri, null);
                 }
 
+                // Retorna quantidade de linhas deletadas
                 return rowDeleted;
             default:
                 throw new IllegalArgumentException("Não foi possível deletar para " + uri);
@@ -205,6 +238,8 @@ public class BookProvider extends ContentProvider {
      * Retorna o número de registros atualizados.
      */
     private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
+        // Verifica se a chave está presente. Se estiver, pega a string dela e verifica se é nula
         if (values.containsKey(BookEntry.COLUMNS_BOOK_NAME)){
             String title = values.getAsString(BookEntry.COLUMNS_BOOK_NAME);
             if (title == null){
@@ -247,16 +282,20 @@ public class BookProvider extends ContentProvider {
             }
         }
 
+        // Retorna caso não haja values para atualizar no banco de dados, não precisando fazer um update vazio
         if (values.size() == 0){
             return 0;
         }
 
+        // Pega o banco no modo escrita e faz a atualização no banco. Se a atualização for
+        // bem sucedida, ele notifica que há mudanças nos dados da URI dada
         SQLiteDatabase database = mBookDbHelper.getWritableDatabase();
         int updated = database.update(BookEntry.TABLE_NAME, values, selection, selectionArgs);
         if (updated != 0){
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
+        // Retorna número de linhas atualizadas
         return updated;
     }
 }

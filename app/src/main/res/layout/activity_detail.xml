@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".DetailActivity">
+    tools:context=".EditorActivity">
 
     <!-- TITULO DA TELA -->
     <TextView
@@ -20,17 +20,13 @@
         android:background="@color/dividerColor" />
 
     <!-- TÍTULO DO LIVRO -->
-    <!-- TODO FAZER UM CONTAINER PRA ESTE LAYOUT -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="horizontal">
+        style="@style/container_label_input"
+        android:layout_marginTop="32dp">
 
-        <!-- TODO REFATORAR O STYLE DESSA VIEW PRA TER O NOME DE UM EDITOR E DETAIL -->
         <TextView
             style="@style/editor_activity_text_view"
-            android:text="Título: " />
+            android:text="@string/title_label" />
 
         <EditText
             android:id="@+id/title_book"
@@ -38,56 +34,50 @@
             android:padding="8dp"
             android:inputType="text"
             android:layout_marginStart="32dp"
-            android:hint="Título do livro"/>
+            android:hint="@string/title_hint"/>
     </LinearLayout>
 
     <!-- GENERO DO LIVRO -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        style="@style/container_label_input">
 
         <TextView
             style="@style/editor_activity_text_view"
-            android:text="Gênero: " />
+            android:text="@string/gender_label" />
 
         <EditText
             android:id="@+id/genre_book"
             style="@style/editor_activity_edit_text"
             android:layout_marginStart="22dp"
-            android:hint="Gênero do livro"
+            android:hint="@string/gender_hint"
             android:inputType="text" />
 
     </LinearLayout>
 
     <!-- PREÇO DO LIVRO -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        style="@style/container_label_input">
 
         <TextView
             style="@style/editor_activity_text_view"
-            android:text="Preço: " />
+            android:text="@string/price_label" />
 
         <EditText
             android:id="@+id/price_book"
             style="@style/editor_activity_edit_text"
             android:layout_marginStart="32dp"
-            android:hint="Preço do livro"
+            android:hint="@string/price_hint"
             android:inputType="numberDecimal" />
 
     </LinearLayout>
 
     <!-- QUANTIDADE DE LIVRO -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        style="@style/container_label_input">
 
         <TextView
             style="@style/editor_activity_text_view"
-            android:text="Quantidade: " />
+            android:text="@string/quantity_label" />
 
         <Button
             android:id="@+id/reduce_quantity_button"
@@ -96,14 +86,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:background="@color/colorPrimary"
-            android:text="-"
+            android:text="@string/minus_quantity_button"
             android:textColor="#FFF" />
 
         <EditText
             android:id="@+id/quantity_book"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="QTD"
+            android:hint="@string/quantity_label_list_item"
             android:inputType="number"/>
 
         <Button
@@ -113,77 +103,75 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:background="@color/colorPrimary"
-            android:text="+"
+            android:text="@string/plus_quantity_button"
             android:textColor="#FFF" />
 
     </LinearLayout>
 
     <!-- NOME DO FORNECEDOR -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal">
+        style="@style/container_label_input"
+        android:layout_marginTop="16dp">
 
         <TextView
             style="@style/editor_activity_text_view"
-            android:text="Fornecedor: " />
+            android:text="@string/supplier_label" />
 
         <EditText
             android:id="@+id/supplier_name"
             style="@style/editor_activity_edit_text"
-            android:hint="Nome do fornecedor"
+            android:hint="@string/supplier_hint"
             android:inputType="text" />
     </LinearLayout>
 
     <!-- TELEFONE DO FORNECEDOR -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        style="@style/container_label_input">
 
         <TextView
             style="@style/editor_activity_text_view"
-            android:text="Telefone: " />
+            android:text="@string/supplier_phone_label" />
 
         <EditText
             android:id="@+id/supplier_phone"
             style="@style/editor_activity_edit_text"
             android:layout_marginStart="8dp"
-            android:hint="Telefone do fornecedor"
+            android:hint="@string/supplier_phone_hint"
             android:inputType="phone"
             android:maxLength="9" />
 
     </LinearLayout>
 
+    <!-- CONTAINER DOS BOTÕES DE EDIÇÃO E EXCLUSÃO -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- BOTÃO PARA DISCAR O TELEFONE DO FORNECEDOR -->
+        <Button
+            android:id="@+id/dial_phone_button"
+            android:layout_gravity="center_horizontal"
+            style="@style/editor_button"
+            android:text="@string/dial_supplier_button"
+            android:padding="4dp"/>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/dial_phone_button"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:layout_marginBottom="16dp">
 
             <Button
                 android:id="@+id/save_button_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:background="@color/colorPrimary"
-                android:text="EDITAR"
-                android:textColor="#FFF" />
+                style="@style/editor_button"
+                android:text="@string/edit_button" />
 
             <Button
                 android:id="@+id/delete_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:background="@color/colorPrimary"
-                android:text="EXCLUIR"
-                android:textColor="#FFF" />
+                style="@style/editor_button"
+                android:text="@string/delete_button" />
 
         </LinearLayout>
     </RelativeLayout>

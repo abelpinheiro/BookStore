@@ -7,18 +7,15 @@
     android:background="?android:attr/selectableItemBackground"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Container para dados de preço e titulo -->
     <LinearLayout
         android:id="@+id/price_title_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        style="@style/container_list_item_data">
 
         <TextView
             android:id="@+id/title"
             tools:text="TITULO"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/list_item_text_field_layout"
             android:paddingBottom="4dp" />
 
 
@@ -28,28 +25,24 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="R$ "/>
+                style="@style/list_item_text_field_layout"
+                android:text="@string/money_symbol"/>
 
             <TextView
                 android:id="@+id/price"
                 tools:text="PREÇO"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                style="@style/list_item_text_field_layout" />
 
         </LinearLayout>
 
     </LinearLayout>
 
+    <!-- Container para dados de quantidade e botão de compra do livro -->
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_gravity="right"
-        android:orientation="vertical"
-        android:padding="16dp">
+        style="@style/container_list_item_data"
+        android:layout_gravity="right">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -57,28 +50,22 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="QTD: "/>
+                style="@style/list_item_text_field_layout"
+                android:text="@string/quantity_label_list_item"/>
 
 
             <TextView
                 android:id="@+id/quantity"
                 tools:text="QUANTIDADE"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/list_item_text_field_layout"
                 android:paddingBottom="4dp" />
 
         </LinearLayout>
 
         <ImageView
             android:id="@+id/buy_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="false"
-            android:src="@drawable/baseline_add_shopping_cart_black_36"
-            android:focusable="false" />
+            style="@style/sell_button_style"
+            android:src="@drawable/baseline_add_shopping_cart_black_36" />
 
     </LinearLayout>
 

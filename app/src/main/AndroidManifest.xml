@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="abelpinheiro.github.io.bookstore">
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -31,7 +33,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="abelpinheiro.github.io.bookstore.MainActivity" />
         </activity>
-        <activity android:name=".DetailActivity"></activity>
     </application>
 
 </manifest>
