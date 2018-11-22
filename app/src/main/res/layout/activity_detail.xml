@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,172 +7,192 @@
     android:orientation="vertical"
     tools:context=".EditorActivity">
 
-    <!-- TITULO DA TELA -->
-    <TextView
-        android:id="@+id/information_message"
-        style="@style/editor_activity_title"
-        tools:text="Informações do livro" />
-
-    <!-- DIVISOR -->
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/dividerColor" />
-
-    <!-- TÍTULO DO LIVRO -->
-    <LinearLayout
-        style="@style/container_label_input"
-        android:layout_marginTop="32dp">
-
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- TITULO DA TELA -->
         <TextView
-            style="@style/editor_activity_text_view"
-            android:text="@string/title_label" />
+            android:id="@+id/information_message"
+            style="@style/editor_activity_title"
+            tools:text="Informações do livro" />
 
-        <EditText
-            android:id="@+id/title_book"
-            style="@style/editor_activity_edit_text"
-            android:padding="8dp"
-            android:inputType="text"
-            android:layout_marginStart="32dp"
-            android:hint="@string/title_hint"/>
-    </LinearLayout>
+        <!-- DIVISOR -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dividerColor" />
 
-    <!-- GENERO DO LIVRO -->
-    <LinearLayout
-        style="@style/container_label_input">
-
-        <TextView
-            style="@style/editor_activity_text_view"
-            android:text="@string/gender_label" />
-
-        <EditText
-            android:id="@+id/genre_book"
-            style="@style/editor_activity_edit_text"
-            android:layout_marginStart="22dp"
-            android:hint="@string/gender_hint"
-            android:inputType="text" />
-
-    </LinearLayout>
-
-    <!-- PREÇO DO LIVRO -->
-    <LinearLayout
-        style="@style/container_label_input">
-
-        <TextView
-            style="@style/editor_activity_text_view"
-            android:text="@string/price_label" />
-
-        <EditText
-            android:id="@+id/price_book"
-            style="@style/editor_activity_edit_text"
-            android:layout_marginStart="32dp"
-            android:hint="@string/price_hint"
-            android:inputType="numberDecimal" />
-
-    </LinearLayout>
-
-    <!-- QUANTIDADE DE LIVRO -->
-    <LinearLayout
-        style="@style/container_label_input">
-
-        <TextView
-            style="@style/editor_activity_text_view"
-            android:text="@string/quantity_label" />
-
-        <Button
-            android:id="@+id/reduce_quantity_button"
-            style="@style/Base.Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/minus_quantity_button"
-            android:textColor="#FFF" />
-
-        <EditText
-            android:id="@+id/quantity_book"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/quantity_label_list_item"
-            android:inputType="number"/>
-
-        <Button
-            android:id="@+id/increase_quantity_button"
-            style="@style/Base.Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/plus_quantity_button"
-            android:textColor="#FFF" />
-
-    </LinearLayout>
-
-    <!-- NOME DO FORNECEDOR -->
-    <LinearLayout
-        style="@style/container_label_input"
-        android:layout_marginTop="16dp">
-
-        <TextView
-            style="@style/editor_activity_text_view"
-            android:text="@string/supplier_label" />
-
-        <EditText
-            android:id="@+id/supplier_name"
-            style="@style/editor_activity_edit_text"
-            android:hint="@string/supplier_hint"
-            android:inputType="text" />
-    </LinearLayout>
-
-    <!-- TELEFONE DO FORNECEDOR -->
-    <LinearLayout
-        style="@style/container_label_input">
-
-        <TextView
-            style="@style/editor_activity_text_view"
-            android:text="@string/supplier_phone_label" />
-
-        <EditText
-            android:id="@+id/supplier_phone"
-            style="@style/editor_activity_edit_text"
-            android:layout_marginStart="8dp"
-            android:hint="@string/supplier_phone_hint"
-            android:inputType="phone"
-            android:maxLength="9" />
-
-    </LinearLayout>
-
-    <!-- CONTAINER DOS BOTÕES DE EDIÇÃO E EXCLUSÃO -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <!-- BOTÃO PARA DISCAR O TELEFONE DO FORNECEDOR -->
-        <Button
-            android:id="@+id/dial_phone_button"
-            android:layout_gravity="center_horizontal"
-            style="@style/editor_button"
-            android:text="@string/dial_supplier_button"
-            android:padding="4dp"/>
-
+        <!-- TÍTULO DO LIVRO -->
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/dial_phone_button"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="16dp">
+            style="@style/container_label_input"
+            android:layout_marginTop="32dp">
 
-            <Button
-                android:id="@+id/save_button_view"
-                style="@style/editor_button"
-                android:text="@string/edit_button" />
+            <TextView
+                style="@style/editor_activity_text_view"
+                android:text="@string/title_label" />
 
-            <Button
-                android:id="@+id/delete_button"
-                style="@style/editor_button"
-                android:text="@string/delete_button" />
+            <EditText
+                android:id="@+id/title_book"
+                style="@style/editor_activity_edit_text"
+                android:padding="8dp"
+                android:inputType="text"
+                android:layout_marginStart="32dp"
+                android:hint="@string/title_hint"/>
+        </LinearLayout>
+
+        <!-- GENERO DO LIVRO -->
+        <LinearLayout
+            style="@style/container_label_input">
+
+            <TextView
+                style="@style/editor_activity_text_view"
+                android:text="@string/gender_label" />
+
+            <EditText
+                android:id="@+id/genre_book"
+                style="@style/editor_activity_edit_text"
+                android:layout_marginStart="22dp"
+                android:hint="@string/gender_hint"
+                android:inputType="text" />
 
         </LinearLayout>
-    </RelativeLayout>
-</LinearLayout>
+
+        <!-- PREÇO DO LIVRO -->
+        <LinearLayout
+            style="@style/container_label_input">
+
+            <TextView
+                style="@style/editor_activity_text_view"
+                android:text="@string/price_label" />
+
+            <EditText
+                android:id="@+id/price_book"
+                style="@style/editor_activity_edit_text"
+                android:layout_marginStart="32dp"
+                android:hint="@string/price_hint"
+                android:inputType="numberDecimal" />
+
+        </LinearLayout>
+
+        <!-- QUANTIDADE DE LIVRO -->
+        <LinearLayout
+            style="@style/container_label_input">
+
+            <TextView
+                style="@style/editor_activity_text_view"
+                android:text="@string/quantity_label" />
+
+            <Button
+                android:id="@+id/reduce_quantity_button"
+                style="@style/Base.Widget.AppCompat.Button.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="@color/colorPrimary"
+                android:text="@string/minus_quantity_button"
+                android:textColor="#FFF" />
+
+            <TextView
+                android:id="@+id/quantity_book"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:hint="@string/quantity_label_list_item"/>
+
+            <Button
+                android:id="@+id/increase_quantity_button"
+                style="@style/Base.Widget.AppCompat.Button.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:background="@color/colorPrimary"
+                android:text="@string/plus_quantity_button"
+                android:textColor="#FFF" />
+
+        </LinearLayout>
+
+        <!-- NOME DO FORNECEDOR -->
+        <LinearLayout
+            style="@style/container_label_input"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                style="@style/editor_activity_text_view"
+                android:text="@string/supplier_label" />
+
+            <EditText
+                android:id="@+id/supplier_name"
+                style="@style/editor_activity_edit_text"
+                android:hint="@string/supplier_hint"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <!-- TELEFONE DO FORNECEDOR -->
+        <LinearLayout
+            style="@style/container_label_input">
+
+            <TextView
+                style="@style/editor_activity_text_view"
+                android:text="@string/supplier_phone_label" />
+
+            <EditText
+                android:id="@+id/supplier_phone"
+                style="@style/editor_activity_edit_text"
+                android:layout_marginStart="8dp"
+                android:hint="@string/supplier_phone_hint"
+                android:inputType="phone"
+                android:maxLength="9" />
+
+        </LinearLayout>
+
+        <!-- CONTAINER DOS BOTÕES DE EDIÇÃO E EXCLUSÃO -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:orientation="vertical">
+
+                <!-- BOTÃO PARA DISCAR O TELEFONE DO FORNECEDOR -->
+                <Button
+                    android:id="@+id/dial_phone_button"
+                    android:layout_gravity="center_horizontal"
+                    style="@style/editor_button"
+                    android:text="@string/dial_supplier_button"
+                    android:padding="4dp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/dial_phone_button"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerInParent="true"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <Button
+                        android:id="@+id/save_button_view"
+                        style="@style/editor_button"
+                        android:text="@string/edit_button" />
+
+                    <Button
+                        android:id="@+id/delete_button"
+                        style="@style/editor_button"
+                        android:text="@string/delete_button" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</ScrollView>

@@ -38,6 +38,18 @@
     <!-- Toast no editor quanto não é possível deletar um livro -->
     <string name="editor_delete_book_failed">Erro ao tentar deletar o livro</string>
 
+    <!-- Toast no editor quando um livro é salvo -->
+    <string name="editor_save_book_successful">Livro adicionado com sucesso!</string>
+
+    <!-- Toast no editor quanto não é possível salvar um livro -->
+    <string name="editor_save_book_failed">ERRO AO ADICIONAR</string>
+
+    <!-- Toast no editor quando um livro é atualizado -->
+    <string name="editor_update_book_successful">Livro atualizado com sucesso!</string>
+
+    <!-- Toast no editor quanto não é possível atualizar um livro -->
+    <string name="editor_update_book_failed">ERRO AO ATUALIZAR</string>
+
     <!-- Mensagem de diálogo perguntando se o usuario deseja excluir o livro atual -->
     <string name="delete_dialog_message">Você gostaria de deletar o livro?</string>
 
@@ -92,6 +104,9 @@
     <!-- Botão de edição -->
     <string name="edit_button">EDITAR</string>
 
+    <!-- Botão de adição -->
+    <string name="save_button">SALVAR</string>
+
     <!-- Botão de deleção -->
     <string name="delete_button">EXCLUIR</string>
 
@@ -102,5 +117,5 @@
     <string name="money_symbol">R$ </string>
 
     <!-- Label de quantidade no item da list view -->
-    <string name="quantity_label_list_item">QTD: </string>
+    <string name="quantity_label_list_item">0</string>
 </resources>
