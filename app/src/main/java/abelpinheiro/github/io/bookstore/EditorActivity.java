@@ -28,11 +28,20 @@ import static abelpinheiro.github.io.bookstore.Data.BookContract.*;
 
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    // uma forma de password para pegar uma string passada por intent da main
     private static final String SAVE_ACTIVITY_TITLE = "SAVE_ACTIVITY_TITLE";
 
+    // Indentificador do loader
     private static final int EXISTING_BOOK_LOADER = 0;
+
+    // Content_URI para o livro atual. Nulo se não houver um livro puxado da list_view
+    // ou inserido corretamente
     private Uri mCurrentBookUri;
+
+    // Flag para saber se um livro teve algum campo modificado
     private boolean mBookHasChanged = false;
+
+    // Listener para a ocorrencia de clicagem em uma view.
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -41,6 +50,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
     };
 
+    // Campos da tela
     private EditText mBookTitleEditText;
     private EditText mBookGenreEditText;
     private EditText mBookPriceEditText;
@@ -53,6 +63,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        // Pegando as referências das views da XML
         Button deleteButton = (Button) findViewById(R.id.delete_button);
         TextView informationMessage = (TextView) findViewById(R.id.information_message);
         Button dialPhone = (Button) findViewById(R.id.dial_phone_button);
@@ -60,6 +71,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         Button reduceQuantity = (Button) findViewById(R.id.reduce_quantity_button);
         final Button addBookButton = (Button) findViewById(R.id.save_button_view);
 
+        mBookTitleEditText = findViewById(R.id.title_book);
+        mBookGenreEditText = findViewById(R.id.genre_book);
+        mBookPriceEditText = findViewById(R.id.price_book);
+        mBookQuantityTextView = findViewById(R.id.quantity_book);
+        mSupplierNameEditText = findViewById(R.id.supplier_name);
+        mSupplierPhoneEditText = findViewById(R.id.supplier_phone);
+
+        // Análise da intent para verificar se está criando um novo livro ou editando um existente.
         Intent intent = getIntent();
         mCurrentBookUri = intent.getData();
 
@@ -78,13 +97,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             getSupportLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
 
-        mBookTitleEditText = findViewById(R.id.title_book);
-        mBookGenreEditText = findViewById(R.id.genre_book);
-        mBookPriceEditText = findViewById(R.id.price_book);
-        mBookQuantityTextView = findViewById(R.id.quantity_book);
-        mSupplierNameEditText = findViewById(R.id.supplier_name);
-        mSupplierPhoneEditText = findViewById(R.id.supplier_phone);
-
+        // Listener para verificar se o usuário modificou algum destes campos. Assim, podemos
+        // saber se há mudanças não salvas, permitindo o app saber e notificar o usuario caso
+        // ele tente sair sem salvar as mudanças feitas.
         mBookTitleEditText.setOnTouchListener(mTouchListener);
         mBookGenreEditText.setOnTouchListener(mTouchListener);
         mBookPriceEditText.setOnTouchListener(mTouchListener);
@@ -92,6 +107,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mSupplierNameEditText.setOnTouchListener(mTouchListener);
         mSupplierPhoneEditText.setOnTouchListener(mTouchListener);
 
+        // Listener para o botão de discagem. Executa o método de discagem
         dialPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,6 +115,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             }
         });
 
+        // Listener para o botão de decremento. Executa o método de decremento de quantidade
         reduceQuantity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,6 +124,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             }
         });
 
+        // Listener para o botão de incremento. Executa o método de incremento de quantidade
         increaseQuantity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,6 +133,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             }
         });
 
+        // Listener para o botão de salvar livro. Executa o método de salvar novo livro ou
+        // atualizar um já existente
         addBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,6 +143,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             }
         });
 
+        // Listener para o botão de exclusão de livro.
         Button deleteBookButton = (Button) findViewById(R.id.delete_button);
         deleteBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,17 +153,26 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         });
     }
 
+    /**
+     * Método vai incrementar ou decrementar a quantidade de livros, sem permitir que fique abaixo de 0
+     * @param change se verdadeiro, foi clicado o botão de incremento. Se falso, decremento
+     */
     private void changeQuantity(boolean change){
         String quantityValue = mBookQuantityTextView.getText().toString();
         int newQuantity;
         if (change){
+            // Verifica se a String obtida de quantidade é vazia. Se for, recebe 0.
+            // Se não, retorna em int a string.
             if (quantityValue.isEmpty()){
                 newQuantity = 0;
             }else {
                 newQuantity = Integer.parseInt(quantityValue);
             }
+            // Incremento da quantidade
             mBookQuantityTextView.setText(String.valueOf(newQuantity + 1));
         }else {
+            // Decremento. Se a string obtida for 0 ou vazia, não faz nada. Se for algum
+            // outro numero, decrementa.
             if (quantityValue.isEmpty() || quantityValue.equals("0")){
                 return;
             }else{
@@ -152,6 +182,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
     }
 
+    /**
+     * Ao pressionar no botão de discagem, pega o telefone do fornecedor e envia para o
+     * app de ligação default do android
+     */
     private void dialPhoneNumber() {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         String phoneNumber = mSupplierPhoneEditText.getText().toString();
@@ -164,32 +198,50 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     /**
      *
-     * Método para inserir no banco de dados um elemento ficticio para testar a
-     * funcionalidade do banco.
-     *
-     * Como o unico modo de inserção é de um dado default, não há necessidade de tratar no momento
-     * possíveis erros de inserção, como tirar os espaços vazios e etc
+     * Método para inserir no banco de dados um livro
      */
     public void saveBook(){
+        // Recebe os dados de um livro dos campos da tela
         String title = mBookTitleEditText.getText().toString().trim();
         String genre = mBookGenreEditText.getText().toString().trim();
         String priceString = mBookPriceEditText.getText().toString().trim();
         String quantityString = mBookQuantityTextView.getText().toString().trim();
+        String supplierName = mSupplierNameEditText.getText().toString().trim();
+        String supplierPhone = PhoneNumberUtils.formatNumber(mSupplierPhoneEditText.getText().toString(), "BR");
 
+        // Se tentar salvar com todos os parâmetros vazios, a tela não insere no banco e retorna para a main
+        if (mCurrentBookUri == null && TextUtils.isEmpty(title) && TextUtils.isEmpty(genre) && TextUtils.isEmpty(priceString) && TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierName) && TextUtils.isEmpty(supplierPhone)){
+            return;
+        }
+
+        // Se tentar salvar com um parâmetro vazio, é lançado um toast avisando e retorna para a main,
+        // sem inserir no banco de dados um elemento com campos nulos
+        if (TextUtils.isEmpty(title) || TextUtils.isEmpty(genre) || TextUtils.isEmpty(supplierName) || TextUtils.isEmpty(supplierPhone)){
+            Toast.makeText(this, "Você não pode salvar um livro sem preencher todos os dados!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Fazendo um cast da string para int de preço
         Integer price = 0;
         if (!priceString.isEmpty()){
             price = Integer.parseInt(priceString);
         }
 
+        // Fazendo um cast da string para int de quantidade
         Integer quantity = 0;
         if (!quantityString.isEmpty()){
             quantity = Integer.parseInt(mBookQuantityTextView.getText().toString());
         }
 
-        String supplierName = mSupplierNameEditText.getText().toString().trim();
-        String supplierPhone = PhoneNumberUtils.formatNumber(mSupplierPhoneEditText.getText().toString(), "BR");
+        // Verificando se o usuario não colocou um preço aceitável no livro (maior que 0)
+        if (price.equals(0)){
+            Toast.makeText(this, "0 não é um preço aceitável. Por favor modifique!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        if (mCurrentBookUri == null && TextUtils.isEmpty(title) && TextUtils.isEmpty(genre) && TextUtils.isEmpty(supplierName) && TextUtils.isEmpty(supplierPhone)){
+        // Verificando se o usuario não colocou uma quantidade aceitável no livro (maior que 0)
+        if (quantity.equals(0)){
+            Toast.makeText(this, "0 não é uma quantidade aceitável. Por favor modifique!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -203,12 +255,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         contentValues.put(BookEntry.COLUMNS_SUPPLIER_NAME, supplierName);
         contentValues.put(BookEntry.COLUMNS_SUPPLIER_PHONE, supplierPhone);
 
+        // Verifica se é um livro novo (realizando assim a inserção no banco)
+        // ou uma já existente (fazendo assim um update)
         if (mCurrentBookUri == null){
             Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, contentValues);
             if (newUri == null){
-                Toast.makeText(this, getString(R.string.editor_save_book_successful), Toast.LENGTH_SHORT).show();
-            }else {
                 Toast.makeText(this, getString(R.string.editor_save_book_failed), Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this, getString(R.string.editor_save_book_successful), Toast.LENGTH_SHORT).show();
             }
         }else {
             int rowsAffected = getContentResolver().update(mCurrentBookUri, contentValues, null, null);
@@ -220,51 +274,78 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
     }
 
+    /**
+     * mostra um diálogo para avisar ao usuário que está saindo da tela de edição sem ter salvo
+     * suas alterações no livro
+     * @param discardButtonListener
+     */
     private void showUnsavedChangeDialog(DialogInterface.OnClickListener discardButtonListener){
+        // Cria um AlertDialog e seta a mensagem e o listener
+        // para a mensagem positiva e negativa
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.unsaved_dialog_change_message);
         builder.setPositiveButton(R.string.discard_message, discardButtonListener);
         builder.setNegativeButton(R.string.keep_editing_message, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                // Se clicado em continuar editando, ele vai cancelar o evento de retornar para a main
+                // e continuar na tela de edição com o livro
                 if (dialogInterface != null){
                     dialogInterface.dismiss();
                 }
             }
         });
 
+        // Gera a tela de dialogo
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
 
+    /**
+     * Método chamado quando o botão de retorno em cima é chamado
+     * @param menuItem
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
         switch (menuItem.getItemId()){
             case android.R.id.home:
+                // Se o livro não tiver sido alterado, permitir que o retorno seja executado
                 if (!mBookHasChanged){
                     NavUtils.navigateUpFromSameTask(EditorActivity.this);
                     return true;
                 }
 
+                // Se tiver algo alterado, criar um diálogo pra avisar ao usuario sobre descarte
+                // de alterações não salvas
                 DialogInterface.OnClickListener discardListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         NavUtils.navigateUpFromSameTask(EditorActivity.this);
                     }
                 };
+
+                // gerar o diálogo de descartar alterações não salvas
                 showUnsavedChangeDialog(discardListener);
                 return true;
         }
         return super.onOptionsItemSelected(menuItem);
     }
 
+    /**
+     *
+     * Método chamado quando o botão de back é pressionado
+     */
     @Override
     public void onBackPressed(){
+        // Se o livro não tiver sido alterado, permitir que o onback seja executado
         if (!mBookHasChanged){
             super.onBackPressed();
             return;
         }
 
+        // Se tiver algo alterado, criar um diálogo pra avisar ao usuario sobre descarte
+        // de alterações não salvas
         DialogInterface.OnClickListener discardListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -272,39 +353,43 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             }
         };
 
+        // gerar o diálogo de descartar alterações não salvas
         showUnsavedChangeDialog(discardListener);
     }
 
+    /**
+     * Pergunta ao usuário se ele quer deletar o livro
+     */
     private void showDeleteConfirmationDialog() {
-        // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
+        // Cria um AlertDialog e seta a mensagem e o listener
+        // para a mensagem positiva e negativa
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.delete_dialog_message);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the pet.
-                deletePet();
+                // Usuario clicou no botão de deletar, deleta o livro do banco.
+                deleteBook();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Cancel" button, so dismiss the dialog
-                // and continue editing the pet.
+                // Usuario clicou no botão de cancelar, retornando para a tela de edição
+                // com o livro atual
                 if (dialog != null) {
                     dialog.dismiss();
                 }
             }
         });
 
-        // Create and show the AlertDialog
+        // Gera a tela de dialogo
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
 
     /**
-     * Perform the deletion of the pet in the database.
+     * Ao pressionar o botão deletar, vai remover o livro do banco de dados
      */
-    private void deletePet() {
+    private void deleteBook() {
         if (mCurrentBookUri != null){
             int rowsDeleted = getContentResolver().delete(mCurrentBookUri, null, null);
 
@@ -336,11 +421,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-
+        // Verificação da linha do cursor
         if (cursor == null || cursor.getCount() < 1) {
             return;
         }
 
+        // Move a linha para a primeira do cursor
         if (cursor.moveToFirst()){
             // Acha as colunas de atributos pet em que estamos interessados
             int titleColumnIndex = cursor.getColumnIndex(BookEntry.COLUMNS_BOOK_NAME);
@@ -358,6 +444,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             String supplierName = cursor.getString(supplierNameColumnIndex);
             String supplierPhone = cursor.getString(supplierPhoneColumnIndex);
 
+            // Setando nos campos os dados
             mBookTitleEditText.setText(title);
             mBookPriceEditText.setText(Integer.toString(price));
             mBookQuantityTextView.setText(Integer.toString(quantity));
@@ -369,6 +456,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-
+        // limpa os campos caso o loader fique invalido
+        mBookTitleEditText.setText("");
+        mBookPriceEditText.setText("");
+        mBookQuantityTextView.setText("");
+        mBookGenreEditText.setText("");
+        mSupplierNameEditText.setText("");
+        mSupplierPhoneEditText.setText("");
     }
 }
